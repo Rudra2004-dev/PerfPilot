@@ -347,7 +347,7 @@ button:focus-visible {
   place-items: center;
   background: #fdfdfd;
   color: #080808;
-  cursor: pointer;
+  cursor: default;
   transition:
     transform 0.18s ease,
     background 0.18s ease;
@@ -363,13 +363,7 @@ button:focus-visible {
   height: calc(17 * var(--u));
   min-width: 17px;
 }
-.url-mode .chevron {
-  width: calc(10 * var(--u));
-  height: calc(10 * var(--u));
-  min-width: 10px;
-  margin-left: calc(2 * var(--u));
-  opacity: 0.48;
-}
+
 .url-field {
   position: relative;
   flex: 1;

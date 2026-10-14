@@ -26,19 +26,15 @@ export function UrlInput({ onSubmit }: UrlInputProps) {
 
   return (
     <form className="url-input" id="audit" role="search" noValidate onSubmit={handleSubmit}>
-      <button className="url-mode" type="button" aria-label="Change URL input mode">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M10.6 13.4a4.2 4.2 0 0 0 5.94 0l2.1-2.1a4.2 4.2 0 0 0-5.94-5.94l-1.2 1.2M13.4 10.6a4.2 4.2 0 0 0-5.94 0l-2.1 2.1a4.2 4.2 0 0 0 5.94 5.94l1.2-1.2"
-            stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"
-          />
-          <path d="m8.7 15.3 6.6-6.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-        </svg>
-        <svg className="chevron" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-          <path d="m3 4.5 3 3 3-3" stroke="currentColor" strokeWidth="1.4"
-            strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
+      <span className="url-mode" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none">
+       <path
+        d="M10.6 13.4a4.2 4.2 0 0 0 5.94 0l2.1-2.1a4.2 4.2 0 0 0-5.94-5.94l-1.2 1.2M13.4 10.6a4.2 4.2 0 0 0-5.94 0l-2.1 2.1a4.2 4.2 0 0 0 5.94 5.94l1.2-1.2"
+        stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"
+       />
+      <path d="m8.7 15.3 6.6-6.6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+    </svg>
+      </span>
 
       <div className="url-field">
         {value.length === 0 && (
