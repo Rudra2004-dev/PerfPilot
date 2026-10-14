@@ -1,4 +1,5 @@
 import { ArrowIcon } from "./ArrowIcon";
+import { focusAuditInput } from "../lib/focusAuditInput";
 
 const NAV_LINKS = [
   { label: "How It Works", href: "#how-it-works" },
@@ -23,7 +24,7 @@ export function Navbar() {
         <a className="btn btn-login" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
           GitHub
         </a>
-        <a className="btn btn-nav-start" href="#audit">
+        <a className="btn btn-nav-start" href="#audit" onClick={focusAuditInput}>
           Run an Audit<ArrowIcon />
         </a>
       </div>

@@ -1,6 +1,7 @@
 import { Navbar } from "./components/Navbar";
 import {Hero} from "./components/Hero";
-import { BackgroundVideo } from "./components/BackGroundVideo";
+import { BackgroundVideo } from "./components/BackgroundVideo";
+
 
 
 export default function App() {
