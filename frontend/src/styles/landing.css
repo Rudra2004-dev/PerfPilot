@@ -113,19 +113,22 @@ body {
   transform: translate(-50%, -50%) translateX(calc(-23 * var(--u)));
   display: flex;
   align-items: center;
-  gap: calc(24.3 * var(--u));
+  gap: calc(4 * var(--u));
   white-space: nowrap;
 }
 .nav-links a {
   color: var(--ink-muted);
   text-decoration: none;
-  font-size: calc(11.5 * var(--u));
+  font-size: calc(14.5 * var(--u));
+  padding: calc(9 * var(--u)) calc(14 * var(--u));
+  border-radius: calc(20 * var(--u));
   font-weight: 500;
   letter-spacing: calc(-0.15 * var(--u));
   line-height: 1;
   transition: color 0.18s ease;
 }
 .nav-links a:hover {
+  background: rgba(255, 255, 255, 0.08);
   color: #fff;
 }
 .nav-actions {
@@ -145,12 +148,12 @@ body {
   cursor: pointer;
 }
 .btn-login {
-  height: calc(28 * var(--u));
-  padding: 0 calc(12.9 * var(--u));
-  border-radius: calc(14 * var(--u));
+  height: calc(40 * var(--u));
+  padding: 0 calc(20 * var(--u));
+  border-radius: calc(20 * var(--u));
   background: var(--panel);
   color: #e8e8e8;
-  font-size: calc(11.5 * var(--u));
+  font-size: calc(15 * var(--u));
   font-weight: 500;
   letter-spacing: calc(-0.15 * var(--u));
   transition:
@@ -162,15 +165,15 @@ body {
   color: #fff;
 }
 .btn-nav-start {
-  height: calc(28 * var(--u));
-  padding-left: calc(13.5 * var(--u));
-  padding-right: calc(14.5 * var(--u));
-  border-radius: calc(14 * var(--u));
+  height: calc(40 * var(--u));
+  padding-left: calc(21 * var(--u));
+  padding-right: calc(22 * var(--u));
+  border-radius: calc(20 * var(--u));
   background: var(--white-btn);
   color: var(--btn-ink);
-  font-size: calc(11.1 * var(--u));
+  font-size: calc(15 * var(--u));
   font-weight: 500;
-  gap: calc(7 * var(--u));
+  gap: calc(8 * var(--u));
   transition: background 0.18s ease;
 }
 .btn-nav-start:hover,
@@ -183,6 +186,12 @@ body {
   width: calc(11.5 * var(--u));
   height: calc(9.6 * var(--u));
 }
+
+.btn-nav-start .arw {
+  width: calc(15 * var(--u));
+  height: calc(12.5 * var(--u));
+}
+
 .burger {
   display: none;
   margin-left: auto;
