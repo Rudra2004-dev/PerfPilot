@@ -3,14 +3,15 @@ import type { FormEvent } from "react";
 import { normalizeUrl } from "../lib/normalizeUrl";
 
 
-type UrlInputProps = { onSubmit: (url: string) => void };
+type UrlInputProps = { onSubmit: (url: string) => void; busy?: boolean };
 
-export function UrlInput({ onSubmit }: UrlInputProps) {
+export function UrlInput({ onSubmit, busy = false }: UrlInputProps) {
   const [value, setValue] = useState("");
   const [status, setStatus] = useState("");
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return;
     if (!value.trim()) {
       setStatus("Enter a URL first.");
       return;
@@ -50,7 +51,7 @@ export function UrlInput({ onSubmit }: UrlInputProps) {
         />
       </div>
 
-      <button className="url-submit" type="submit" aria-label="Run audit">
+      <button className="url-submit" type="submit" aria-label="Run audit" disabled={busy}>
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8"
             strokeLinecap="round" strokeLinejoin="round" />

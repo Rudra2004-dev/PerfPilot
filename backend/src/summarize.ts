@@ -38,6 +38,7 @@ export interface Diagnostics {
   lcpPhases: { phase: string; ms: number }[];
   heavyScripts: { url: string; scriptingMs: number }[];
   thirdParties: { name: string; mainThreadMs: number; kb: number }[];
+  lcpIsLazy?: boolean;
 }
 
 const METRICS = [
@@ -78,10 +79,12 @@ function estimateSavingsMs(audit: any): number {
   return Math.max(0, ms.LCP ?? 0, ms.FCP ?? 0);
 }
 
+// Lighthouse sometimes puts an object where we expect a list
+const asArray = (v: unknown): any[] => (Array.isArray(v) ? v : []);
 // Detail rows, minus the wrapper entries Lighthouse mixes into "list" details
 function cleanItems(audit: any): Record<string, unknown>[] {
   const skip = ["table", "node", "list", "debugdata"];
-  return (audit.details?.items ?? []).filter(
+  return asArray(audit.details?.items).filter(
     (i: any) => i && !skip.includes(i.type)
   );
 }
@@ -90,7 +93,7 @@ function cleanItems(audit: any): Record<string, unknown>[] {
 function extractDiagnostics(audits: Record<string, any>): Diagnostics {
   const d: Diagnostics = { lcpPhases: [], heavyScripts: [], thirdParties: [] };
 
-  const lcpItems: any[] = audits["lcp-breakdown-insight"]?.details?.items ?? [];
+  const lcpItems: any[] = asArray(audits["lcp-breakdown-insight"]?.details?.items);
   const node = lcpItems.find((i) => i?.type === "node");
   if (node) {
     d.lcpElement = {
@@ -98,25 +101,26 @@ function extractDiagnostics(audits: Record<string, any>): Diagnostics {
       snippet: String(node.snippet ?? "").slice(0, 300),
       label: String(node.nodeLabel ?? "").slice(0, 120),
     };
+    d.lcpIsLazy = /loading=["']lazy["']/i.test(String(node.snippet ?? ""));
   }
   const table = lcpItems.find((i) => i?.type === "table");
-  d.lcpPhases = (table?.items ?? [])
-    .map((r: any) => ({
+  d.lcpPhases = asArray(table?.items)
+  .map((r: any) => ({
       phase: String(r.label ?? r.subpart ?? ""),
       ms: Math.round(Number(r.duration ?? 0)),
     }))
     .filter((p: { phase: string }) => p.phase);
 
-  d.heavyScripts = (audits["bootup-time"]?.details?.items ?? [])
-    .map((i: any) => ({
+ d.heavyScripts = asArray(audits["bootup-time"]?.details?.items)
+  .map((i: any) => ({
       url: String(i.url ?? "").slice(0, 200),
       scriptingMs: Math.round(Number(i.scripting ?? 0)),
     }))
     .sort((a: any, b: any) => b.scriptingMs - a.scriptingMs)
     .slice(0, 3);
 
-    d.thirdParties = (audits["third-parties-insight"]?.details?.items ?? [])
-    .map((i: any) => ({
+    d.thirdParties = asArray(audits["third-parties-insight"]?.details?.items)
+  .map((i: any) => ({
       name: typeof i.entity === "string" ? i.entity : String(i.entity?.text ?? "unknown"),
       mainThreadMs: Math.round(Number(i.mainThreadTime ?? 0)),
       kb: Math.round(Number(i.transferSize ?? 0) / 1024),
@@ -145,6 +149,7 @@ export function summarize(lhr: Lhr, maxIssues = 8): Summary {
     if (ref.group === "metrics") continue; // metrics are handled above
     const audit = lhr.audits[ref.id];
     if (!audit) continue;
+    if (ref.id === "cache-insight") continue;
 
     const mode = audit.scoreDisplayMode;
     if (mode === "notApplicable" || mode === "manual" || mode === "error") continue;

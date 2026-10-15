@@ -442,6 +442,23 @@ button:focus-visible {
   white-space: nowrap;
   border: 0;
 }
+
+.audit-note {
+  min-height: 1.4em;
+  margin: calc(12 * var(--u)) auto 0;
+  max-width: min(calc(430 * var(--u)), calc(100vw - 40px));
+  font-size: max(13px, calc(13.5 * var(--u)));
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.75);
+}
+.audit-note.is-error {
+  color: #fca5a5;
+}
+.url-submit:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
 @keyframes placeholderIn {
   from {
     opacity: 0;
