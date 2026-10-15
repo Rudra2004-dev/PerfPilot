@@ -1,4 +1,4 @@
-export const GITHUB_URL = "https://github.com/YOUR-USERNAME/perfpilot";
+export const GITHUB_URL = "https://github.com/Rudra2004-dev";
 
 export const VIDEO_SRC =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260912_104036_bd6924f6-3c8e-417e-8465-6d03c8c2e9e6.mp4";

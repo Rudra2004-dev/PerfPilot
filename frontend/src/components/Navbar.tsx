@@ -3,12 +3,6 @@ import { ArrowIcon } from "./ArrowIcon";
 import { GITHUB_URL } from "../constants";
 import { focusAuditInput } from "../lib/focusAuditInput";
 
-const NAV_LINKS = [
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "What It Checks", href: "#what-it-checks" },
-  { label: "Sample Report", href: "#sample-report" },
-];
-
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const burgerRef = useRef<HTMLButtonElement>(null);
@@ -43,12 +37,6 @@ export function Navbar() {
       <header className="nav">
         <a className="logo" href="#">PerfPilot</a>
 
-        <nav className="nav-links" aria-label="Primary">
-          {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href}>{link.label}</a>
-          ))}
-        </nav>
-
         <div className="nav-actions">
           <a className="btn btn-login" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
             GitHub
@@ -80,10 +68,6 @@ export function Navbar() {
           if ((e.target as HTMLElement).closest("a")) setOpen(false);
         }}
       >
-        {NAV_LINKS.map((link) => (
-          <a key={link.href} href={link.href}>{link.label}</a>
-        ))}
-        <div className="divider"></div>
         <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
         <a className="m-start" href="#audit" onClick={focusAuditInput}>
           Run an Audit<ArrowIcon />

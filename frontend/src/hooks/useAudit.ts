@@ -46,5 +46,10 @@ export function useAudit() {
     }
   }, []);
 
-  return { state, start };
+  const reset = useCallback(() => {
+    controller.current?.abort();
+    setState({ status: "idle" });
+  }, []);
+
+  return { state, start, reset };
 }
