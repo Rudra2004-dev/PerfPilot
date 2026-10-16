@@ -3,7 +3,7 @@ import * as chromeLauncher from "chrome-launcher";
 
 export async function runLighthouse(url: string) {
   const chrome = await chromeLauncher.launch({
-    chromeFlags: ["--headless", "--no-sandbox"],
+    chromeFlags: ["--headless", "--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
   });
   try {
     const result = await lighthouse(url, {

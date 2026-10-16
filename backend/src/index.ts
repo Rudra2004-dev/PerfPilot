@@ -5,8 +5,19 @@ import { runLighthouse } from "./lighthouse/runLighthouse.js";
 import { summarize } from "./summarize.js";
 import { explain } from "./explain.js";
 import { validateTarget, UrlError } from "./security/validateUrl.js";
+import rateLimit from "express-rate-limit";
 
 const app = express();
+// Cloud Run puts exactly one proxy in front of the app; this makes req.ip the real client
+app.set("trust proxy", 1);
+
+const auditLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 6, // audits per IP per hour
+  standardHeaders: "draft-8",
+  legacyHeaders: false,
+  message: { error: "Rate limit reached: 6 audits per hour. Please try again later." },
+});
 app.use(cors({ origin: process.env.FRONTEND_ORIGIN ?? "http://localhost:5173" }));
 app.use(express.json({ limit: "10kb" }));
 
@@ -29,7 +40,7 @@ function withTimeout<T>(work: Promise<T>, ms: number): Promise<T> {
   return Promise.race([work, timeout]).finally(() => clearTimeout(timer));
 }
 
-app.post("/audit", async (req, res) => {
+app.post("/audit", auditLimiter, async (req, res) => {
   let url: string;
   try {
     url = await validateTarget(req.body?.url);
