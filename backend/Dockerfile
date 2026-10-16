@@ -10,7 +10,8 @@ RUN npm run build
 # ---- runtime stage: Chromium + production deps only ----
 FROM node:22-bookworm-slim
 ENV NODE_ENV=production \
-    CHROME_PATH=/usr/bin/chromium
+    CHROME_PATH=/usr/bin/chromium \
+    PORT=8080
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \

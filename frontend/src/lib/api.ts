@@ -28,14 +28,16 @@ export class ApiError extends Error {}
 
 // Cheap request that wakes a sleeping free-tier server
 export async function ping(signal: AbortSignal): Promise<void> {
-  let res: Response;
-  try {
-    res = await fetch(`${API}/health`, { signal });
-  } catch {
+  for (;;) {
+    try {
+      const res = await fetch(`${API}/health`, { signal });
+      if (res.ok) return;
+    } catch {
+      if (signal.aborted) throw signal.reason;
+    }
+    await new Promise((r) => setTimeout(r, 3000));
     if (signal.aborted) throw signal.reason;
-    throw new ApiError("Could not reach the server. Please try again in a moment.");
   }
-  if (!res.ok) throw new ApiError("The server is not responding. Please try again.");
 }
 
 export async function runAudit(url: string, signal: AbortSignal): Promise<AuditResult> {
