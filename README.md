@@ -13,9 +13,16 @@ PerfPilot runs a real Lighthouse performance audit in headless Chrome, shrinks t
 
 > **Live demo:** not hosted. Lighthouse drives a real Chrome and needs roughly 1 to 2 GB of RAM, and I couldn't find a free, no-card host with that much. See the demo video above, or run it locally in about five minutes (below).
 
-**Case study:** [I audited a slow page with PerfPilot, applied its fixes, and re-audited it](docs/CASE_STUDY.md)
 
 ---
+
+## Why not just use Lighthouse?
+
+PerfPilot uses Lighthouse as its measurement engine. Lighthouse lists dozens of audits and leaves you to work out what matters. PerfPilot adds three things on top:
+
+- **Prioritization.** Problems are ranked by estimated impact, so you know what to fix first.
+- **Page-specific explanations.** Instead of a generic "Properly size images", you get advice grounded in your page's own evidence (the actual LCP element, scripts and file sizes), with a code snippet.
+- **Honest output.** Every explanation is labelled as AI-generated or template-based.
 
 ## How it works
 
@@ -31,6 +38,10 @@ flowchart LR
   H --> G
   G --> A
 ```
+
+## Example output
+
+Auditing a news homepage (mobile, simulated throttling) produced a score of 35, with LCP at 10.4 s and Total Blocking Time at 4.1 s. PerfPilot flagged that the main LCP image had `loading="lazy"`, which delays the most important image on the page, and ranked the heaviest scripts and unused JavaScript below it.
 
 1. **Validate.** The URL is checked and its DNS answers are resolved and screened before Chrome ever starts (see [Security](#security)).
 2. **Audit.** Lighthouse runs the performance category in headless Chrome.
@@ -75,7 +86,7 @@ PerfPilot makes a server fetch whatever URL a stranger types, which is a classic
 **Prerequisites:** Node.js 22+, Google Chrome (or Chromium) installed, and a free [Groq API key](https://console.groq.com).
 
 ```bash
-git clone https://github.com/<your-username>/perfpilot.git
+git clone https://github.com/Rudra2004-dev/perfpilot.git
 cd perfpilot
 ```
 
@@ -115,6 +126,8 @@ npx tsx src/try.ts https://example.com            # saves fixtures/example.com.j
 npx tsx src/trySummary.ts fixtures/example.com.json
 npx tsx src/tryExplain.ts fixtures/example.com.json
 ```
+
+To check the SSRF validator against a list of tricky inputs: `npx tsx src/tryValidate.ts`.
 
 ## API
 
@@ -163,17 +176,17 @@ Response:
 ```
 backend/
   src/
-    index.ts              Express app, /audit and /health, rate limit, timeout
-    security/validateUrl.ts   URL + DNS validation (SSRF protection)
+    index.ts                      Express app, /audit and /health, rate limit, timeout
+    security/validateUrl.ts       URL + DNS validation (SSRF protection)
     lighthouse/runLighthouse.ts   Launch Chrome, run Lighthouse
-    summarize.ts          Shrink the report, rank issues
-    explain.ts            LLM call, Zod validation, fallbacks
+    summarize.ts                  Shrink the report, rank issues, extract diagnostics
+    explain.ts                    LLM call, Zod validation, fallbacks
   Dockerfile
 frontend/
   src/
-    hooks/useAudit.ts     idle / connecting / auditing / success / error states
-    lib/api.ts            API client
-    components/           Hero, UrlInput, Results, Navbar
+    hooks/useAudit.ts             idle / connecting / auditing / success / error states
+    lib/api.ts                    API client
+    components/                   Hero, UrlInput, Results, Navbar
 docs/
   CASE_STUDY.md
 ```
@@ -185,6 +198,12 @@ docs/
 - **AI explanations and code snippets can be wrong.** They're grounded in the audit evidence, but review them before applying them.
 - **Performance category only.** Accessibility, SEO, and best-practices audits are not included.
 
+## What's next
+
+- Unit tests for the URL validator and the ranking logic, using saved Lighthouse fixtures.
+- A GitHub Action that fails a pull request when the performance score drops.
+- Audit history and before/after comparison for the same URL.
+
 ## License
 
-MIT (add a `LICENSE` file).
+MIT. See [LICENSE](LICENSE).
