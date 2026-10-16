@@ -2,7 +2,6 @@
 
 **Paste a URL. Get a Lighthouse audit, the fixes ranked by impact, and a plain-English explanation of each one, with code.**
 
-![PerfPilot demo](docs/demo.gif)
 
 <p>
   <img src="docs/hero.png" alt="PerfPilot landing page" width="49%" />
@@ -10,8 +9,6 @@
 </p>
 
 PerfPilot runs a real Lighthouse performance audit in headless Chrome, shrinks the multi-megabyte report down to the facts that matter, ranks the problems with deterministic code, and then asks an LLM to explain only those problems. If the LLM is down, rate-limited, or returns bad JSON, you still get a complete report built from templates.
-
-> **Live demo:** not hosted. Lighthouse drives a real Chrome and needs roughly 1 to 2 GB of RAM, and I couldn't find a free, no-card host with that much. See the demo video above, or run it locally in about five minutes (below).
 
 
 ---
@@ -188,7 +185,8 @@ frontend/
     lib/api.ts                    API client
     components/                   Hero, UrlInput, Results, Navbar
 docs/
-  CASE_STUDY.md
+  hero.png
+  results.png
 ```
 
 ## Limitations
